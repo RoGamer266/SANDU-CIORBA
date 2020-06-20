@@ -9,15 +9,15 @@ const client = new Discord.Client();
 const queue = new Map();
 
 client.once("ready", () => {
-  console.log("CRISTEA E IN PESTERA!");
+  console.log("Ready!");
 });
 
 client.once("reconnecting", () => {
-  console.log("ma reconectez");
+  console.log("Reconnecting!");
 });
 
 client.once("disconnect", () => {
-  console.log("AM PLECAT, RE");
+  console.log("Disconnect!");
 });
 
 client.on("message", async message => {
@@ -36,7 +36,7 @@ client.on("message", async message => {
     stop(message, serverQueue);
     return;
   } else {
-    message.channel.send("trebuie sa introduci o comanda valida, incearca play, skip si stop");
+    message.channel.send("You need to enter a valid command!");
   }
 });
 
@@ -46,12 +46,12 @@ async function execute(message, serverQueue) {
   const voiceChannel = message.member.voice.channel;
   if (!voiceChannel)
     return message.channel.send(
-      "trebuie sa fi in VC ca sa bag muzica"
+      "You need to be in a voice channel to play music!"
     );
   const permissions = voiceChannel.permissionsFor(message.client.user);
   if (!permissions.has("CONNECT") || !permissions.has("SPEAK")) {
     return message.channel.send(
-      "AM NEVOIE DE PERM ADMIN PLS FIX"
+      "I need the permissions to join and speak in your voice channel!"
     );
   }
 
@@ -86,24 +86,24 @@ async function execute(message, serverQueue) {
     }
   } else {
     serverQueue.songs.push(song);
-    return message.channel.send(`${song.title} a fost adaugat la coada`);
+    return message.channel.send(`${song.title} has been added to the queue!`);
   }
 }
 
 function skip(message, serverQueue) {
   if (!message.member.voice.channel)
     return message.channel.send(
-      "trebuie sa fi in VC ca sa sar peste muzica"
+      "You have to be in a voice channel to stop the music!"
     );
   if (!serverQueue)
-    return message.channel.send("nu exista nicio melodie care pot sari peste");
+    return message.channel.send("There is no song that I could skip!");
   serverQueue.connection.dispatcher.end();
 }
 
 function stop(message, serverQueue) {
   if (!message.member.voice.channel)
     return message.channel.send(
-      "trebuie sa fi in VC ca sa opresc muzica"
+      "You have to be in a voice channel to stop the music!"
     );
   serverQueue.songs = [];
   serverQueue.connection.dispatcher.end();
@@ -125,7 +125,7 @@ function play(guild, song) {
     })
     .on("error", error => console.error(error));
   dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
-  serverQueue.textChannel.send(`acum bag **${song.title}**`);
+  serverQueue.textChannel.send(`Start playing: **${song.title}**`);
 }
 
 client.login(process.env.token);
