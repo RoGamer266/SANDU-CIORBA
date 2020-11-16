@@ -9,15 +9,15 @@ const client = new Discord.Client();
 const queue = new Map();
 
 client.once("ready", () => {
-  console.log("Ready!");
+  console.log("on it!");
 });
 
 client.once("reconnecting", () => {
-  console.log("Reconnecting!");
+  console.log("IM BACK BABY!");
 });
 
 client.once("disconnect", () => {
-  console.log("Disconnect!");
+  console.log("change the world, my final message, goodbye");
 });
 
 client.on("message", async message => {
@@ -36,7 +36,7 @@ client.on("message", async message => {
     stop(message, serverQueue);
     return;
   } else {
-    message.channel.send("You need to enter a valid command!");
+    message.channel.send("dude what are you even tryna say");
   }
 });
 
@@ -46,12 +46,12 @@ async function execute(message, serverQueue) {
   const voiceChannel = message.member.voice.channel;
   if (!voiceChannel)
     return message.channel.send(
-      "You need to be in a voice channel to play music!"
+      "have you even considered the idea of joining a VC before you summon me?"
     );
   const permissions = voiceChannel.permissionsFor(message.client.user);
   if (!permissions.has("CONNECT") || !permissions.has("SPEAK")) {
     return message.channel.send(
-      "I need the permissions to join and speak in your voice channel!"
+      "pls fix perms men"
     );
   }
 
@@ -93,17 +93,17 @@ async function execute(message, serverQueue) {
 function skip(message, serverQueue) {
   if (!message.member.voice.channel)
     return message.channel.send(
-      "You have to be in a voice channel to stop the music!"
+      "have you even considered the idea of joining a VC before you try to skip me?"
     );
   if (!serverQueue)
-    return message.channel.send("There is no song that I could skip!");
+    return message.channel.send("how, there is no song skippable");
   serverQueue.connection.dispatcher.end();
 }
 
 function stop(message, serverQueue) {
   if (!message.member.voice.channel)
     return message.channel.send(
-      "You have to be in a voice channel to stop the music!"
+      "have you even considered the idea of joining a VC before you try to stop me?"
     );
   serverQueue.songs = [];
   serverQueue.connection.dispatcher.end();
